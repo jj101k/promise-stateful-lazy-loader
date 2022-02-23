@@ -19,7 +19,7 @@ export class DelayedStatefulPromise<T> {
      * This is where the state for the promise goes. This is private in the
      * Typescript sense so that it IS enumerated by state trackers.
      */
-    protected state?: StatefulPromise<T>
+    protected state?: StatefulPromise<T> = undefined
 
     /**
      * The value. While deferred, this will be undefined; likewise, while it's
