@@ -27,26 +27,28 @@ class SimpleClass {
 }
 
 describe("Delayed", () => {
-    let o: SimpleClass
-    beforeEach(() => o = new SimpleClass())
-    describe("Immediate values", () => {
-        it("Can track a simple case", async () => {
-            await new Promise(resolve => setTimeout(resolve, 0))
-            assert(o.foo == "FIXME")
+    describe("On a class", () => {
+        let o: SimpleClass
+        beforeEach(() => o = new SimpleClass())
+        describe("Immediate values", () => {
+            it("Can track a simple case", async () => {
+                await new Promise(resolve => setTimeout(resolve, 0))
+                assert(o.foo == "FIXME")
+            })
         })
-    })
-    describe("Async values", () => {
-        it("Can track a simple case (success)", async () => {
-            await new Promise(resolve => setTimeout(resolve, 0))
-            assert(o.bar === undefined)
-            await new Promise(resolve => setTimeout(resolve, 50))
-            assert(o.bar == 1)
-        })
-        it("Can track a simple case (failure)", async () => {
-            await new Promise(resolve => setTimeout(resolve, 0))
-            assert(o.baz === undefined)
-            await new Promise(resolve => setTimeout(resolve, 50))
-            assert(o.baz == undefined)
+        describe("Async values", () => {
+            it("Can track a simple case (success)", async () => {
+                await new Promise(resolve => setTimeout(resolve, 0))
+                assert(o.bar === undefined)
+                await new Promise(resolve => setTimeout(resolve, 50))
+                assert(o.bar == 1)
+            })
+            it("Can track a simple case (failure)", async () => {
+                await new Promise(resolve => setTimeout(resolve, 0))
+                assert(o.baz === undefined)
+                await new Promise(resolve => setTimeout(resolve, 50))
+                assert(o.baz == undefined)
+            })
         })
     })
     describe("Delay tests", () => {
