@@ -28,6 +28,9 @@ export class DelayedStatefulPromiseInvalidate<T> extends DelayedStatefulPromise<
         }
         return value
     }
+    set value(v) {
+        super.value = v
+    }
 
     /**
      * This will mark the state as invalid, so that the loader will work again, but
