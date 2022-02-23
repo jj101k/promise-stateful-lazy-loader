@@ -76,5 +76,16 @@ describe("File analyser tests", () => {
             f.activate()
             assert(f.value === "test")
         })
+        it("Can be wiped", async () => {
+            let i = 0
+            const f = new DelayedStatefulPromise(async () => i++, null)
+            assert(f.value === undefined)
+            await new Promise(resolve => setTimeout(resolve, 0))
+            assert(f.value === 0)
+            f.value = undefined
+            assert(f.value === undefined)
+            await new Promise(resolve => setTimeout(resolve, 0))
+            assert(f.value === 1)
+        })
     })
 })
