@@ -8,13 +8,13 @@ class DecoratedClass {
     foo!: string
 
     @Decorator.lazyState(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100))
+        await new Promise(resolve => setTimeout(resolve, 50))
         return 1
     })
     bar!: number
 
     @Decorator.lazyState(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100))
+        await new Promise(resolve => setTimeout(resolve, 50))
         throw new Error("Failed")
     })
     baz!: number
@@ -33,13 +33,13 @@ describe("File analyser tests", () => {
         it("Can track a simple case (success)", async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
             assert(o.bar === undefined)
-            await new Promise(resolve => setTimeout(resolve, 100))
+            await new Promise(resolve => setTimeout(resolve, 50))
             assert(o.bar == 1)
         })
         it("Can track a simple case (failure)", async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
             assert(o.baz === undefined)
-            await new Promise(resolve => setTimeout(resolve, 100))
+            await new Promise(resolve => setTimeout(resolve, 50))
             assert(o.baz == undefined)
         })
     })
