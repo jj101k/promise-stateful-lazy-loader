@@ -59,13 +59,13 @@ export class DelayedStatefulPromise<T> {
      * @param loader This will be called when .value is fetched
      * @param deferTime By default, the getter will be deferred for 0ms so that
      * initial enumeration won't trigger it. If you need longer, you can set to
-     * a higher value. If you need no deferment, set to null. If you need
+     * a higher value. If you need no deferment, set to -1. If you need
      * indefinite deferment, set to undefined and call .activate() later.
      */
-    constructor(protected loader: () => Promise<T> | T, deferTime: number | null | undefined = 0) {
+    constructor(protected loader: () => Promise<T> | T, deferTime: number | null = 0) {
         if(deferTime === null) {
             this.activate()
-        } else if(deferTime !== undefined) {
+        } else if(deferTime >= 0) {
             setTimeout(() => this.activate(), deferTime)
         }
     }

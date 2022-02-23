@@ -148,6 +148,6 @@ You can set it to `null` if you want it immediately loadable, which can save you
 one run loop (perhaps relevant while iterating) but usually
 `StatefulPromise.immediate` is more helpful for that kind of purpose.
 
-You can also set it to `undefined` if you want to come back and call
-`.activate()` yourself at some point, eg. if there's a very convoluted set of
-conditions after which calling the loader will be valid.
+You can also set it to `-1` if you want to come back and call `.activate()`
+yourself at some point, eg. if there's a very convoluted set of conditions after
+which calling the loader will be valid.
