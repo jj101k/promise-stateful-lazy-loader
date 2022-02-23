@@ -7,17 +7,16 @@ import { StatefulPromise } from "./StatefulPromise"
  */
 export class DelayedStatefulPromise<T> {
     /**
-     * This is private in the Javascript sense to prevent its enumeration by
-     * state trackers, which would otherwise jump into action as soon as this
-     * value changed.
+     * This is private in the Typescript sense so that it is enumerated by state
+     * trackers.
      *
      * See .value
      */
-    #deferred = true
+    private deferred = true
 
     /**
-     * This is where the state for the promise goes. This is private in the
-     * Typescript sense so that it IS enumerated by state trackers.
+     * This is where the state for the promise goes. This is protected in the
+     * Typescript sense so that it is enumerated by state trackers.
      */
     protected state?: StatefulPromise<T> = undefined
 
@@ -36,7 +35,7 @@ export class DelayedStatefulPromise<T> {
     get value() {
         const logger = Logger.inst
         logger.log("Getting")
-        if(this.#deferred) {
+        if(this.deferred) {
             logger.log("Deferred")
             return undefined
         }
@@ -74,6 +73,6 @@ export class DelayedStatefulPromise<T> {
      * This will un-defer the object immediately.
      */
     activate() {
-        this.#deferred = false
+        this.deferred = false
     }
 }
