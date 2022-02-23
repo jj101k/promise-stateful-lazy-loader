@@ -20,7 +20,7 @@ class DecoratedClass {
     baz!: number
 }
 
-describe("File analyser tests", () => {
+describe("Decorators", () => {
     let o: DecoratedClass
     beforeEach(() => o = new DecoratedClass())
     describe("Immediate values", () => {

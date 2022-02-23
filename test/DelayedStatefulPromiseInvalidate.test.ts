@@ -2,7 +2,7 @@ import assert from "assert"
 import { describe, it } from "mocha"
 import { DelayedStatefulPromiseInvalidate } from ".."
 
-describe("File analyser tests", () => {
+describe("Delayed (Invalidate)", () => {
     it("Can be wiped", async () => {
         let i = 0
         const f = new DelayedStatefulPromiseInvalidate(async () => i++, null)

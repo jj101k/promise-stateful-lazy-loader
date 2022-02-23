@@ -26,7 +26,7 @@ class SimpleClass {
     }
 }
 
-describe("File analyser tests", () => {
+describe("Delayed", () => {
     let o: SimpleClass
     beforeEach(() => o = new SimpleClass())
     describe("Immediate values", () => {
