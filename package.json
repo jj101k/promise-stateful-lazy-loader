@@ -2,7 +2,7 @@
     "name": "promise-stateful-lazy-loader",
     "version": "1.0.0",
     "description": "Simple lazy loader to handle promises on state systems",
-    "main": "index.js",
+    "main": "dist/index.js",
     "scripts": {
         "build": "tsc",
         "prepare": "rm -rf dist; tsc; webpack ./dist/index.js",
