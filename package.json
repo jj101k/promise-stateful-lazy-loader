@@ -4,25 +4,27 @@
     "description": "Simple lazy loader to handle promises on state systems",
     "main": "index.js",
     "scripts": {
-      "build": "tsc",
-      "prepare": "rm -rf dist; tsc",
-      "test": "mocha --require ts-node/register test/**/*.test.ts"
+        "build": "tsc",
+        "prepare": "rm -rf dist; tsc; webpack ./dist/index.js",
+        "test": "mocha --require ts-node/register test/**/*.test.ts"
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/jj101k/promise-stateful-lazy-loader.git"
+        "type": "git",
+        "url": "git+https://github.com/jj101k/promise-stateful-lazy-loader.git"
     },
     "author": "Jim Driscoll",
     "license": "BSD-3-Clause",
     "bugs": {
-      "url": "https://github.com/jj101k/promise-stateful-lazy-loader/issues"
+        "url": "https://github.com/jj101k/promise-stateful-lazy-loader/issues"
     },
     "homepage": "https://github.com/jj101k/promise-stateful-lazy-loader#readme",
     "devDependencies": {
-      "@types/mocha": "^9.0.0",
-      "@types/node": "^16.10.3",
-      "mocha": "^9.1.2",
-      "ts-node": "^10.3.0",
-      "typescript": "^4.4.3"
+        "@types/mocha": "^9.0.0",
+        "@types/node": "^16.10.3",
+        "mocha": "^9.1.2",
+        "ts-node": "^10.3.0",
+        "typescript": "^4.4.3",
+        "webpack": "^5.69.1",
+        "webpack-cli": "^4.9.2"
     }
-  }
+}
