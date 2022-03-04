@@ -144,11 +144,11 @@ it to be triggered only when it's actually used.
 You can safely set a longer delay (in milliseconds) if for some reason you want
 it to be non-loadable for longer.
 
-You can set it to `null` if you want it immediately loadable, which can save you
+You can also use `LazyValue` if you want it immediately loadable, which can save you
 one run loop (perhaps relevant while iterating) but usually
 `StatefulPromise.immediate` is more helpful for that kind of purpose.
 
-You can also set it to `-1` if you want to come back and call `.activate()`
+You can also set it to `null` if you want to come back and call `.activate()`
 yourself at some point, eg. if there's a very convoluted set of conditions after
 which calling the loader will be valid.
 
@@ -167,6 +167,6 @@ object prepares to do to _itself_ before it's proxy-wrapped isn't ever going to
 be known to the proxy, and that's a problem if you want any enumeration the
 proxy does not to trigger any actions, which is the case here.
 
-There are a couple of workarounds you can apply: either set the delay to `-1`,
+There are a couple of workarounds you can apply: either use `LazyValue`,
 accepting that it probably will be evaluated before there's any demand, or set
 the delay to `null` and call `activate()` later.

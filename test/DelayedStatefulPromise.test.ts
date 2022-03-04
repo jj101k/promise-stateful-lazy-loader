@@ -1,6 +1,7 @@
 import assert from "assert"
 import { describe, it } from "mocha"
 import { DelayedStatefulPromise } from "../"
+import { LazyValue } from "../src"
 
 class SimpleClass {
     fooDelayed = new DelayedStatefulPromise(() => "FIXME")
@@ -66,10 +67,6 @@ describe("Delayed", () => {
             await new Promise(resolve => setTimeout(resolve, 50))
             assert(f.value === "test")
         })
-        it("Can be evaluated immediately", async () => {
-            const f = new DelayedStatefulPromise(() => "test", null)
-            assert(f.value === "test")
-        })
         it("Can be evaluated at a chosen time", async () => {
             const f = new DelayedStatefulPromise(() => "test", -1)
             assert(f.value === undefined)
@@ -77,17 +74,6 @@ describe("Delayed", () => {
             assert(f.value === undefined)
             f.activate()
             assert(f.value === "test")
-        })
-        it("Can be wiped", async () => {
-            let i = 0
-            const f = new DelayedStatefulPromise(async () => i++, null)
-            assert(f.value === undefined)
-            await new Promise(resolve => setTimeout(resolve, 0))
-            assert(f.value === 0)
-            f.value = undefined
-            assert(f.value === undefined)
-            await new Promise(resolve => setTimeout(resolve, 0))
-            assert(f.value === 1)
         })
     })
 })
