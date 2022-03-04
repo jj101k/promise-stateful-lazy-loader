@@ -10,7 +10,7 @@
         "forceConsistentCasingInFileNames": true,
         "declaration": true,
         "lib": [
-            "es2020"
+            "es2020", "DOM"
         ],
         "outDir": "dist/",
         "baseUrl": ".",
@@ -19,5 +19,5 @@
         },
         "experimentalDecorators": true
     },
-    "include": ["src/", "index.ts"]
+    "include": ["src/", "index.ts", "webpack.ts"]
 }

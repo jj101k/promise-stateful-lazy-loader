@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "scripts": {
         "build": "tsc",
-        "prepare": "rm -rf dist && tsc && webpack ./dist/index.js",
+        "prepare": "rm -rf dist && tsc && webpack ./dist/webpack.js",
         "test": "mocha --require ts-node/register test/**/*.test.ts"
     },
     "repository": {
