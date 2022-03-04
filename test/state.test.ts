@@ -74,4 +74,58 @@ describe("State tracking", () => {
             assert(o.foo == "FIXME", "Value is eventually set")
         })
     })
+    describe("proxy", () => {
+        class Handler {
+            sets: any[] = []
+            get(target: any, n: string, receiver: any): any {
+                let i: PropertyDescriptor | undefined = undefined
+                let o = target
+                while(o && !i) {
+                    i = Object.getOwnPropertyDescriptor(
+                        o,
+                        n
+                    )
+                    o = Object.getPrototypeOf(o)
+                }
+                let value
+                if(i?.get) {
+                    value = i.get.call(receiver)
+                } else {
+                    value = target[n]
+                }
+                if(value instanceof Object) {
+                    return new Proxy(value, this)
+                } else {
+                    return value
+                }
+            }
+            set(target: any, n: string, v: any) {
+                this.sets.push([target, n])
+                target[n] = v
+                return true
+            }
+
+            clearSets() {
+                this.sets = []
+            }
+            getSets() {
+                return this.sets
+            }
+        }
+        it("Can track a simple case", async () => {
+            const o = {
+                fooDelayed: new DelayedStatefulPromise(() => "FIXME"),
+                get foo() {
+                    return this.fooDelayed.value
+                },
+            }
+            const handler = new Handler()
+            const ob = new Proxy(o, handler)
+
+            assert.equal(ob.foo, undefined, "Initially no value")
+            await new Promise(resolve => setTimeout(resolve, 0))
+            // We actually just look for any change.
+            assert(ob.foo == "FIXME", "Value is eventually set")
+        })
+    })
 })
