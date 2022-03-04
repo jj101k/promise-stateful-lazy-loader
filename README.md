@@ -151,3 +151,22 @@ one run loop (perhaps relevant while iterating) but usually
 You can also set it to `-1` if you want to come back and call `.activate()`
 yourself at some point, eg. if there's a very convoluted set of conditions after
 which calling the loader will be valid.
+
+### Different kinds of state tracking
+
+There are two simple ways to track state:
+
+1. Rewrite the object in-place. This is, in practice, the Observer pattern; it's
+   heavier but will report every change from first modification
+2. Wrap around the object with another - the Proxy pattern used for observation.
+   This is lighter but can only affect callers which are actually using the
+   proxy.
+
+There's a key functional difference between the two, which is that anything the
+object prepares to do to _itself_ before it's proxy-wrapped isn't ever going to
+be known to the proxy, and that's a problem if you want any enumeration the
+proxy does not to trigger any actions, which is the case here.
+
+There are a couple of workarounds you can apply: either set the delay to `-1`,
+accepting that it probably will be evaluated before there's any demand, or set
+the delay to `null` and call `activate()` later.
