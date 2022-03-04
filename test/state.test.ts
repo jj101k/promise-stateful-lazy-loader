@@ -17,7 +17,7 @@ describe("State tracking", () => {
                     continue
                 }
                 original[k] = o[k]
-                if(typeof o[k] == "object") {
+                if(o[k] instanceof Object) {
                     observe(o[k])
                 }
                 Object.defineProperty(
@@ -30,7 +30,7 @@ describe("State tracking", () => {
                         set(v) {
                             this._sets.push([k, v])
                             this._original[k] = v
-                            if(typeof v == "object") {
+                            if(v instanceof Object) {
                                 observe(v)
                             }
                         }
@@ -68,18 +68,10 @@ describe("State tracking", () => {
                 },
             }
             observe(o)
-            const ob = o as unknown as {getSets(): any[], clearSets(): void}
-            assert(ob.getSets().length == 0, "Initially no sets")
-            ob.clearSets()
             assert(o.foo === undefined, "Initially no value")
-            assert(ob.getSets().length == 0, "No sets on first evaluation")
-            ob.clearSets()
             await new Promise(resolve => setTimeout(resolve, 0))
             // We actually just look for any change.
-            assert(ob.getSets().length > 0, "Some sets after first evaluation")
-            ob.clearSets()
             assert(o.foo == "FIXME", "Value is eventually set")
-            assert(ob.getSets().length > 0, "Some sets after successful evaluation")
         })
     })
 })
