@@ -33,6 +33,7 @@ describe("Delayed", () => {
         beforeEach(() => o = new SimpleClass())
         describe("Immediate values", () => {
             it("Can track a simple case", async () => {
+                assert.equal(o.foo, undefined)
                 await new Promise(resolve => setTimeout(resolve, 0))
                 assert.equal(o.foo, "FIXME")
             })
@@ -41,12 +42,16 @@ describe("Delayed", () => {
             it("Can track a simple case (success)", async () => {
                 await new Promise(resolve => setTimeout(resolve, 0))
                 assert.equal(o.bar, undefined)
+                await new Promise(resolve => setTimeout(resolve, 0))
+                assert.equal(o.bar, undefined)
                 await new Promise(resolve => setTimeout(resolve, 50))
                 assert.equal(o.bar, 1)
             })
             it("Can track a simple case (failure)", async () => {
                 await new Promise(resolve => setTimeout(resolve, 0))
                 assert.equal(o.baz, undefined)
+                await new Promise(resolve => setTimeout(resolve, 0))
+                assert.equal(o.bar, undefined)
                 await new Promise(resolve => setTimeout(resolve, 50))
                 assert.equal(o.baz, undefined)
             })
