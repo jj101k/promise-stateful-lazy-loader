@@ -49,7 +49,8 @@ export class DelayedStatefulPromise<T> extends InactiveLazyValue<T> {
      * @param deferTime You've got some options here for when evaluation can happen:
      *  - <=0 (default): Not in the current context. This will actually enable
      *    evaluation 0ms after the next attempt to enumerate the value - this is
-     *    so that users of Proxy can see the change
+     *    so that users of Proxy can see the change. In practice that means it's
+     *    two evaluation cycles after this constructor is called.
      *  - > 0: `n`ms later. Unlike `0` above, the first enumeration might be
      *    evaluated, if it's late enough.
      */
