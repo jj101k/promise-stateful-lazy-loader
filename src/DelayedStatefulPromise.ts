@@ -25,7 +25,7 @@ export class DelayedStatefulPromise<T> extends InactiveLazyValue<T> {
                 setTimeout(() => this.activate(), 0)
             } else {
                 const now = new Date()
-                if(now > deferUntil) {
+                if(now < deferUntil) {
                     logger.log("later activate")
                     setTimeout(() => this.activate(), deferUntil.valueOf() - now.valueOf())
                 } else {
