@@ -26,21 +26,22 @@ describe("Decorators", () => {
     describe("Immediate values", () => {
         it("Can track a simple case", async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
-            assert(o.foo == "FIXME")
+            assert.equal(o.foo, "FIXME")
         })
     })
     describe("Async values", () => {
         it("Can track a simple case (success)", async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
-            assert(o.bar === undefined)
+            assert.equal(o.bar, undefined)
             await new Promise(resolve => setTimeout(resolve, 50))
-            assert(o.bar == 1)
+            assert.equal(o.bar, 1)
         })
         it("Can track a simple case (failure)", async () => {
             await new Promise(resolve => setTimeout(resolve, 0))
-            assert(o.baz === undefined)
+            const b = o.baz
+            assert.equal(b, undefined)
             await new Promise(resolve => setTimeout(resolve, 50))
-            assert(o.baz == undefined)
+            assert.equal(o.baz, undefined)
         })
     })
 })

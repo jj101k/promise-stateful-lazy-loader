@@ -68,10 +68,10 @@ describe("State tracking", () => {
                 },
             }
             observe(o)
-            assert(o.foo === undefined, "Initially no value")
+            assert.equal(o.foo, undefined, "Initially no value")
             await new Promise(resolve => setTimeout(resolve, 0))
             // We actually just look for any change.
-            assert(o.foo == "FIXME", "Value is eventually set")
+            assert.equal(o.foo, "FIXME", "Value is eventually set")
         })
     })
     describe("proxy", () => {
@@ -125,7 +125,7 @@ describe("State tracking", () => {
             assert.equal(ob.foo, undefined, "Initially no value")
             await new Promise(resolve => setTimeout(resolve, 0))
             // We actually just look for any change.
-            assert(ob.foo == "FIXME", "Value is eventually set")
+            assert.equal(ob.foo, "FIXME", "Value is eventually set")
         })
     })
 })
