@@ -67,13 +67,5 @@ describe("Delayed", () => {
             await new Promise(resolve => setTimeout(resolve, 50))
             assert.equal(f.value, "test")
         })
-        it("Can be evaluated at a chosen time", async () => {
-            const f = new DelayedStatefulPromise(() => "test", -1)
-            assert.equal(f.value, undefined)
-            await new Promise(resolve => setTimeout(resolve, 0))
-            assert.equal(f.value, undefined)
-            f.activate()
-            assert.equal(f.value, "test")
-        })
     })
 })
