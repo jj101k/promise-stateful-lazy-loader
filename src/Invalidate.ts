@@ -1,6 +1,7 @@
 import { DelayedStatefulPromise } from "./DelayedStatefulPromise"
 import { InactiveLazyValue } from "./InactiveLazyValue"
 import { LazyValue } from "./LazyValue"
+import { Logger } from "./Logger"
 
 function InvalidateMixin<T, TBase extends {new(...args: any[]): LazyValue<T>}>(Base: TBase) {
     /**
@@ -24,6 +25,7 @@ function InvalidateMixin<T, TBase extends {new(...args: any[]): LazyValue<T>}>(B
             const value = super.value
             if (this.invalid) {
                 this.invalid = false
+                const logger = Logger.inst.log("Invalidated - reload")
                 if (value !== undefined) {
                     this.loadValue()
                 }
