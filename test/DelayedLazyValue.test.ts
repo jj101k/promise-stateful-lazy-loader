@@ -1,15 +1,15 @@
 import assert from "assert"
 import { describe, it } from "mocha"
-import { DelayedStatefulPromise } from "../"
+import { DelayedLazyValue } from ".."
 import { LazyValue } from "../src"
 
 class SimpleClass {
-    fooDelayed = new DelayedStatefulPromise(() => "FIXME")
-    barDelayed = new DelayedStatefulPromise(async () => {
+    fooDelayed = new DelayedLazyValue(() => "FIXME")
+    barDelayed = new DelayedLazyValue(async () => {
         await new Promise(resolve => setTimeout(resolve, 50))
         return 1
     })
-    bazDelayed = new DelayedStatefulPromise(async () => {
+    bazDelayed = new DelayedLazyValue(async () => {
         await new Promise(resolve => setTimeout(resolve, 50))
         throw new Error("Failed")
     })
@@ -59,13 +59,13 @@ describe("Delayed", () => {
     })
     describe("Delay tests", () => {
         it("Is normally evaluated on the next loop", async () => {
-            const f = new DelayedStatefulPromise(() => "test")
+            const f = new DelayedLazyValue(() => "test")
             assert.equal(f.value, undefined)
             await new Promise(resolve => setTimeout(resolve, 0))
             assert.equal(f.value, "test")
         })
         it("Can be evaluated at a later time", async () => {
-            const f = new DelayedStatefulPromise(() => "test", 50)
+            const f = new DelayedLazyValue(() => "test", 50)
             assert.equal(f.value, undefined)
             await new Promise(resolve => setTimeout(resolve, 0))
             assert.equal(f.value, undefined)

@@ -5,7 +5,7 @@ import { Logger } from "./Logger"
  * This is an object with a "value" property to be lazy-loaded. The lazy-loading
  * functionality will be disabled for a defined time on startup - check the constructor.
  */
-export class DelayedStatefulPromise<T> extends InactiveLazyValue<T> {
+export class DelayedLazyValue<T> extends InactiveLazyValue<T> {
     /**
      * When to stop deferring. Null means at-next-opportunity.
      */

@@ -1,5 +1,5 @@
 export * from "./Decorator"
-export * from "./DelayedStatefulPromise"
+export * from "./DelayedLazyValue"
 export * from "./Invalidate"
 export * from "./InactiveLazyValue"
 export * from "./LazyValue"

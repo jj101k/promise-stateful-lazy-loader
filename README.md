@@ -14,9 +14,9 @@ clear it later.
 The main ways to use this functionality are this:
 
 ```js
-import {DelayedStatefulPromise} from "promise-stateful-lazy-loader"
+import {DelayedLazyValue} from "promise-stateful-lazy-loader"
 class Foo {
-    barDelayed = new DelayedStatefulPromise(() => fetch("/bar"))
+    barDelayed = new DelayedLazyValue(() => fetch("/bar"))
     get bar() {
         return this.barDelayed.value
     }
@@ -59,9 +59,9 @@ This saves you having to write your own wrapper, but otherwise is the same as
 ### Delayed
 
 ```js
-import {DelayedStatefulPromise} from "promise-stateful-lazy-loader"
+import {DelayedLazyValue} from "promise-stateful-lazy-loader"
 class Foo {
-    barDelayed = new DelayedStatefulPromise(() => fetch("/bar"))
+    barDelayed = new DelayedLazyValue(() => fetch("/bar"))
     get bar() {
         return this.barDelayed.value
     }
@@ -81,9 +81,9 @@ immediately drop any promise that's waiting to set the value.
 ### Delayed (Invalidate)
 
 ```js
-import {DelayedStatefulPromiseInvalidate} from "promise-stateful-lazy-loader"
+import {Invalidate} from "promise-stateful-lazy-loader"
 class Foo {
-    barDelayed = new DelayedStatefulPromiseInvalidate(() => fetch("/bar"))
+    barDelayed = new Invalidate.LazyValue(() => fetch("/bar"))
     get bar() {
         return this.barDelayed.value
     }
@@ -135,7 +135,7 @@ can DIY as
 
 ### Delay Options
 
-There's a second option to the `DelayedStatefulPromise` constructor: the delay
+There's a second option to the `DelayedLazyValue` constructor: the delay
 time. This is `0` by default, which just kicks activation of the getter to after
 the current run loop ends; usually that's a good idea if your state detection
 software is going to evaluate your getter immediately, because you probably want

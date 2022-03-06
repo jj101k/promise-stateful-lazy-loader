@@ -1,5 +1,5 @@
 import { Logger } from "./Logger"
-import { DelayedStatefulPromise } from "./DelayedStatefulPromise"
+import { DelayedLazyValue } from "./DelayedLazyValue"
 
 /**
  * This is the set of lazy states for a prototype
@@ -99,12 +99,12 @@ export class Decorator {
                     /**
                      *
                      */
-                    protected _lazy: { [propertyName: string]: DelayedStatefulPromise<T>}  = {};
+                    protected _lazy: { [propertyName: string]: DelayedLazyValue<T>}  = {};
 
                     constructor(...args: any[]) {
                         super(...args)
                         for (const [propertyName, f] of config.lazyStates.entries()) {
-                            this._lazy[propertyName] = new DelayedStatefulPromise(f)
+                            this._lazy[propertyName] = new DelayedLazyValue(f)
                         }
                     }
                 }

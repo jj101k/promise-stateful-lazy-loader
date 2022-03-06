@@ -1,4 +1,4 @@
-import { DelayedStatefulPromise } from "./DelayedStatefulPromise"
+import { DelayedLazyValue } from "./DelayedLazyValue"
 import { InactiveLazyValue } from "./InactiveLazyValue"
 import { LazyValue } from "./LazyValue"
 import { Logger } from "./Logger"
@@ -47,7 +47,7 @@ function InvalidateMixin<T, TBase extends {new(...args: any[]): LazyValue<T>}>(B
 }
 
 export const Invalidate = {
-    DelayedStatefulPromise: InvalidateMixin(DelayedStatefulPromise),
+    DelayedLazyValue: InvalidateMixin(DelayedLazyValue),
     InactiveLazyValue: InvalidateMixin(InactiveLazyValue),
     LazyValue: InvalidateMixin(LazyValue),
 }

@@ -1,6 +1,6 @@
 import assert from "assert"
 import { describe, it } from "mocha"
-import { DelayedStatefulPromise } from ".."
+import { DelayedLazyValue } from ".."
 
 describe("State tracking", () => {
     describe("observe", () => {
@@ -62,7 +62,7 @@ describe("State tracking", () => {
         }
         it("Can track a simple case", async () => {
             const o = {
-                fooDelayed: new DelayedStatefulPromise(() => "FIXME"),
+                fooDelayed: new DelayedLazyValue(() => "FIXME"),
                 get foo() {
                     return this.fooDelayed.value
                 },
@@ -114,7 +114,7 @@ describe("State tracking", () => {
         }
         it("Can track a simple case", async () => {
             const o = {
-                fooDelayed: new DelayedStatefulPromise(() => "FIXME"),
+                fooDelayed: new DelayedLazyValue(() => "FIXME"),
                 get foo() {
                     return this.fooDelayed.value
                 },
