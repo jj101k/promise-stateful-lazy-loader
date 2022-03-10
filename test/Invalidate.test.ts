@@ -5,7 +5,7 @@ import { Invalidate } from ".."
 describe("Delayed (Invalidate)", () => {
     it("Can be wiped", async () => {
         let i = 0
-        const f = new Invalidate.DelayedLazyValue(async () => i++)
+        const f = new Invalidate.Delayed.LazyValue(async () => i++)
         assert.equal(f.value, undefined)
         await new Promise(resolve => setTimeout(resolve, 0))
         assert.equal(f.value, undefined)
@@ -18,7 +18,7 @@ describe("Delayed (Invalidate)", () => {
     })
     it("Can be invalidated", async () => {
         let i = 0
-        const f = new Invalidate.DelayedLazyValue(async () => i++)
+        const f = new Invalidate.Delayed.LazyValue(async () => i++)
         assert.equal(f.value, undefined)
         await new Promise(resolve => setTimeout(resolve, 0))
         assert.equal(f.value, undefined)

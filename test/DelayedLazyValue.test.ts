@@ -1,7 +1,6 @@
 import assert from "assert"
 import { describe, it } from "mocha"
-import { DelayedLazyValue } from ".."
-import { LazyValue } from "../src"
+import { DelayedLazyValue } from "../src/DelayedLazyValue"
 
 class SimpleClass {
     fooDelayed = new DelayedLazyValue(() => "FIXME")

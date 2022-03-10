@@ -1,6 +1,6 @@
 import assert from "assert"
 import { describe, it } from "mocha"
-import { LazyValue } from "../"
+import { LazyValue } from "../src/LazyValue"
 
 describe("Lazy", () => {
     describe("Delay tests", () => {

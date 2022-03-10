@@ -14,9 +14,9 @@ clear it later.
 The main ways to use this functionality are this:
 
 ```js
-import {DelayedLazyValue} from "promise-stateful-lazy-loader"
+import {Delayed} from "promise-stateful-lazy-loader"
 class Foo {
-    barDelayed = new DelayedLazyValue(() => fetch("/bar"))
+    barDelayed = new Delayed.LazyValue(() => fetch("/bar"))
     get bar() {
         return this.barDelayed.value
     }
@@ -59,9 +59,9 @@ This saves you having to write your own wrapper, but otherwise is the same as
 ### Delayed
 
 ```js
-import {DelayedLazyValue} from "promise-stateful-lazy-loader"
+import {Delayed} from "promise-stateful-lazy-loader"
 class Foo {
-    barDelayed = new DelayedLazyValue(() => fetch("/bar"))
+    barDelayed = new Delayed.LazyValue(() => fetch("/bar"))
     get bar() {
         return this.barDelayed.value
     }
@@ -135,7 +135,7 @@ can DIY as
 
 ### Delay Options
 
-There's a second option to the `DelayedLazyValue` constructor: the delay
+There's a second option to the `Delayed.LazyValue` constructor: the delay
 time. This is `0` by default, which just kicks activation of the getter to after
 the current run loop ends; usually that's a good idea if your state detection
 software is going to evaluate your getter immediately, because you probably want
@@ -144,8 +144,8 @@ it to be triggered only when it's actually used.
 You can safely set a longer delay (in milliseconds) if for some reason you want
 it to be non-loadable for longer.
 
-You can also use `LazyValue` if you want it immediately loadable, which can save you
-one run loop (perhaps relevant while iterating) but usually
+You can also use `Immediate.LazyValue` if you want it immediately loadable,
+which can save you one run loop (perhaps relevant while iterating) but usually
 `StatefulPromise.immediate` is more helpful for that kind of purpose.
 
 You can also set it to `null` if you want to come back and call `.activate()`
@@ -167,6 +167,6 @@ object prepares to do to _itself_ before it's proxy-wrapped isn't ever going to
 be known to the proxy, and that's a problem if you want any enumeration the
 proxy does not to trigger any actions, which is the case here.
 
-There are a couple of workarounds you can apply: either use `LazyValue`,
+There are a couple of workarounds you can apply: either use `Immediate.LazyValue`,
 accepting that it probably will be evaluated before there's any demand, or set
 the delay to `null` and call `activate()` later.
