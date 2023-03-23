@@ -10,7 +10,7 @@ export class StatefulPromise<T> {
      * @param state
      * @param loader
      */
-    private static async callLoader<T>(state: StatefulPromise<T>, loader: () => Promise<T> | T) {
+    public static async callLoader<T>(state: StatefulPromise<T>, loader: () => Promise<T> | T) {
         const logger = Logger.inst
         logger.log("Calling function")
         const valueOrPromise = loader()
