@@ -1,6 +1,67 @@
 import { StatefulPromise } from "./StatefulPromise"
 
 /**
+ * Allows you to take some action on a set of items after a fixed time, with
+ * a shorter possible time before it is marked as not loadable.
+ *
+ * This is intended to handle cache entry expiry because that'll work a little
+ * more efficiently if removing several at once, but it can safely be used for
+ * other purposes.
+ */
+class LargeCacheExpiryControl<T> {
+    /**
+     *
+     */
+    private complete = false
+
+    /**
+     *
+     */
+    private loadable = true
+
+    /**
+     *
+     */
+    public toRemove = new Set<T>()
+
+    /**
+     * When this is true, the object can be dropped entirely.
+     */
+    get isComplete() {
+        return this.complete
+    }
+
+    /**
+     * Advisory only. You can use this to tell when to stop loading this object
+     * and start loading a new one.
+     */
+    get isLoadable() {
+        return this.loadable
+    }
+
+    /**
+     * Builds the object.
+     *
+     * For cache expiry, you might go for t*1.5 for the complete-after time and
+     * t*1 for the loadable-period value, meaning candidate items are always
+     * expired between t*0.5 and t*1.5.
+     *
+     * @param completeAfterMs
+     * @param callback
+     * @param loadablePeriodMs
+     */
+    constructor(completeAfterMs: number, callback: (remove: T[]) => any,
+        loadablePeriodMs = completeAfterMs
+    ) {
+        setTimeout(() => this.loadable = false, loadablePeriodMs)
+        setTimeout(() => {
+            this.complete = true
+            callback([...this.toRemove])
+        })
+    }
+}
+
+/**
  * This gives you a map which isn't populated _yet_. When you access entries,
  * they will be loaded.
  *
@@ -13,6 +74,46 @@ import { StatefulPromise } from "./StatefulPromise"
  */
 export class LazyMap<K, V> implements Map<K, V> {
     private results = new Map<K, StatefulPromise<V>>()
+
+    /**
+     *
+     */
+    private timeouts: LargeCacheExpiryControl<K>[] = []
+
+    /**
+     *
+     */
+    private get activeTimeout() {
+        if(this.timeoutMs === undefined) {
+            return null
+        }
+        const currentTimeout = this.timeouts[0]
+        if(currentTimeout?.isLoadable) {
+            return currentTimeout
+        } else {
+            const newTimeout = new LargeCacheExpiryControl<K>(
+                this.timeoutMs * 1.5, this.removeCacheEntries.bind(this),
+                this.timeoutMs)
+            this.timeouts.unshift(newTimeout)
+            return newTimeout
+        }
+    }
+
+    /**
+     * Removes the keys.
+     *
+     * As a cleanup pass, this will also drop any complete timeouts.
+     *
+     * @param keys
+     */
+    private removeCacheEntries(keys: K[]) {
+        for(const key of keys) {
+            this.results.delete(key)
+        }
+        this.timeouts = this.timeouts.filter(
+            gct => !gct.isComplete
+        )
+    }
 
     /**
      *
@@ -61,8 +162,9 @@ export class LazyMap<K, V> implements Map<K, V> {
         }
         const newResult = StatefulPromise.immediate(() => this.loader(key))
         this.results.set(key, newResult)
-        if(this.timeoutMs) {
-            setTimeout(() => this.results.delete(key), this.timeoutMs)
+        const activeTimeout = this.activeTimeout
+        if(activeTimeout) {
+            activeTimeout.toRemove.add(key)
         }
         return newResult.value
     }
