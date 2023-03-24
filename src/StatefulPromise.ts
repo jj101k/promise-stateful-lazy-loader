@@ -35,6 +35,11 @@ export class StatefulPromise<T> {
      * Where the returned value doesn't actually look like a promise, this will try
      * to skip the extra execution pass by assigning it directly.
      *
+     * This doesn't perform any kind of cache lifetime management itself; if
+     * you're using this for non-static data, you should really do something
+     * like setTimeout(() => value = null, 300_000) after value =
+     * StatefulPromise.immediate(...).
+     *
      * @param loader
      * @returns
      */

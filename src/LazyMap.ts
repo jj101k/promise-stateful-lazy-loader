@@ -17,8 +17,11 @@ export class LazyMap<K, V> implements Map<K, V> {
     /**
      *
      * @param loader
+     * @param timeoutMs
      */
-    constructor(private loader: (k: K) => Promise<V> | V) {
+    constructor(private loader: (k: K) => Promise<V> | V,
+        private timeoutMs?: number
+    ) {
 
     }
 
@@ -58,6 +61,9 @@ export class LazyMap<K, V> implements Map<K, V> {
         }
         const newResult = StatefulPromise.immediate(() => this.loader(key))
         this.results.set(key, newResult)
+        if(this.timeoutMs) {
+            setTimeout(() => this.results.delete(key), this.timeoutMs)
+        }
         return newResult.value
     }
     has(key: K): boolean {
