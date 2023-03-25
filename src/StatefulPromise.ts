@@ -15,7 +15,7 @@ export class StatefulPromise<T> {
         logger.log("Calling function")
         const valueOrPromise = loader()
         logger.log("Got result", valueOrPromise)
-        if (typeof valueOrPromise == "object" && "then" in valueOrPromise) {
+        if (valueOrPromise && typeof valueOrPromise == "object" && "then" in valueOrPromise) {
             logger.log("It's async")
             try {
                 state.value = await valueOrPromise
