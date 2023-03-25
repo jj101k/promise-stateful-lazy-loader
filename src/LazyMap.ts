@@ -1,3 +1,4 @@
+import { BatchSendCondition, SelectionBuffer } from "@jdframe/selection-buffer"
 import { StatefulPromise } from "./StatefulPromise"
 
 /**
@@ -8,28 +9,11 @@ import { StatefulPromise } from "./StatefulPromise"
  * more efficiently if removing several at once, but it can safely be used for
  * other purposes.
  */
-class LargeCacheExpiryControl<T> {
-    /**
-     *
-     */
-    private complete = false
-
+class LargeCacheExpiryControl<T> extends SelectionBuffer<T> {
     /**
      *
      */
     private loadable = true
-
-    /**
-     *
-     */
-    public toRemove = new Set<T>()
-
-    /**
-     * When this is true, the object can be dropped entirely.
-     */
-    get isComplete() {
-        return this.complete
-    }
 
     /**
      * Advisory only. You can use this to tell when to stop loading this object
@@ -46,18 +30,14 @@ class LargeCacheExpiryControl<T> {
      * t*1 for the loadable-period value, meaning candidate items are always
      * expired between t*0.5 and t*1.5.
      *
-     * @param completeAfterMs
-     * @param callback
+     * @param sendCondition
      * @param loadablePeriodMs
      */
-    constructor(completeAfterMs: number, callback: (remove: T[]) => any,
-        loadablePeriodMs = completeAfterMs
-    ) {
-        setTimeout(() => this.loadable = false, loadablePeriodMs)
-        setTimeout(() => {
-            this.complete = true
-            callback([...this.toRemove])
-        })
+    constructor(sendCondition: BatchSendCondition<T>, loadablePeriodMs?: number) {
+        super(sendCondition)
+        if(loadablePeriodMs) {
+            setTimeout(() => this.loadable = false, loadablePeriodMs)
+        }
     }
 }
 
@@ -92,8 +72,8 @@ export class LazyMap<K, V> implements Map<K, V> {
             return currentTimeout
         } else {
             const newTimeout = new LargeCacheExpiryControl<K>(
-                this.timeoutMs * 1.5, this.removeCacheEntries.bind(this),
-                this.timeoutMs)
+                {timeoutMs: this.timeoutMs * 1.5}, this.timeoutMs)
+            newTimeout.then(this.removeCacheEntries.bind(this))
             this.timeouts.unshift(newTimeout)
             return newTimeout
         }
@@ -111,7 +91,7 @@ export class LazyMap<K, V> implements Map<K, V> {
             this.results.delete(key)
         }
         this.timeouts = this.timeouts.filter(
-            gct => !gct.isComplete
+            gct => gct.ready
         )
     }
 
@@ -164,7 +144,7 @@ export class LazyMap<K, V> implements Map<K, V> {
         this.results.set(key, newResult)
         const activeTimeout = this.activeTimeout
         if(activeTimeout) {
-            activeTimeout.toRemove.add(key)
+            activeTimeout.add(key)
         }
         return newResult.value
     }
