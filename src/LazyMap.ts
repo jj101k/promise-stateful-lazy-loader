@@ -56,24 +56,24 @@ export class LazyMap<K, V> implements Map<K, V> {
     private results = new Map<K, StatefulPromise<V>>()
 
     /**
-     *
+     * Any active cache key collection to expire
      */
-    private currentTimeout: LargeCacheExpiryControl<K> | null = null
+    private currentCacheExpiryHandler: LargeCacheExpiryControl<K> | null = null
 
     /**
-     *
+     * A collection of cache keys to expire later
      */
-    private get activeTimeout() {
-        if(this.timeoutMs === undefined) {
+    private get activeCacheExpiryHandler() {
+        if(this.cacheTTLMs === undefined) {
             return null
         }
-        if(this.currentTimeout?.isLoadable) {
-            return this.currentTimeout
+        if(this.currentCacheExpiryHandler?.isLoadable) {
+            return this.currentCacheExpiryHandler
         } else {
             const newTimeout = new LargeCacheExpiryControl<K>(
-                {timeoutMs: this.timeoutMs * 1.5}, this.timeoutMs)
+                {timeoutMs: this.cacheTTLMs * 1.5}, this.cacheTTLMs)
             newTimeout.then(this.removeCacheEntries.bind(this))
-            this.currentTimeout = newTimeout
+            this.currentCacheExpiryHandler = newTimeout
             return newTimeout
         }
     }
@@ -90,18 +90,18 @@ export class LazyMap<K, V> implements Map<K, V> {
         for(const key of keys) {
             this.results.delete(key)
         }
-        if(this.currentTimeout?.ready) {
-            this.currentTimeout = null
+        if(this.currentCacheExpiryHandler?.ready) {
+            this.currentCacheExpiryHandler = null
         }
     }
 
     /**
      *
      * @param loader
-     * @param timeoutMs
+     * @param cacheTTLMs
      */
     constructor(private loader: (k: K) => Promise<V> | V,
-        private timeoutMs?: number
+        private cacheTTLMs?: number
     ) {
 
     }
@@ -142,7 +142,7 @@ export class LazyMap<K, V> implements Map<K, V> {
         }
         const newResult = StatefulPromise.immediate(() => this.loader(key))
         this.results.set(key, newResult)
-        this.activeTimeout?.add(key)
+        this.activeCacheExpiryHandler?.add(key)
         return newResult.value
     }
     has(key: K): boolean {
