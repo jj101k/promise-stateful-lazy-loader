@@ -136,14 +136,13 @@ export class LazyMap<K, V> implements Map<K, V> {
         })
     }
     get(key: K) {
-        const result = this.results.get(key)
-        if(result) {
-            return result.value
+        let result = this.results.get(key)
+        if(!result) {
+            result = StatefulPromise.immediate(() => this.loader(key))
+            this.results.set(key, result)
+            this.activeCacheExpiryHandler?.add(key)
         }
-        const newResult = StatefulPromise.immediate(() => this.loader(key))
-        this.results.set(key, newResult)
-        this.activeCacheExpiryHandler?.add(key)
-        return newResult.value
+        return result.value
     }
     has(key: K): boolean {
         return this.results.has(key)
