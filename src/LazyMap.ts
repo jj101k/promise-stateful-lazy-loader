@@ -58,7 +58,7 @@ export class LazyMap<K, V> implements Map<K, V> {
     /**
      *
      */
-    private timeouts: LargeCacheExpiryControl<K>[] = []
+    private currentTimeout: LargeCacheExpiryControl<K> | null = null
 
     /**
      *
@@ -67,14 +67,13 @@ export class LazyMap<K, V> implements Map<K, V> {
         if(this.timeoutMs === undefined) {
             return null
         }
-        const currentTimeout = this.timeouts[0]
-        if(currentTimeout?.isLoadable) {
-            return currentTimeout
+        if(this.currentTimeout?.isLoadable) {
+            return this.currentTimeout
         } else {
             const newTimeout = new LargeCacheExpiryControl<K>(
                 {timeoutMs: this.timeoutMs * 1.5}, this.timeoutMs)
             newTimeout.then(this.removeCacheEntries.bind(this))
-            this.timeouts.unshift(newTimeout)
+            this.currentTimeout = newTimeout
             return newTimeout
         }
     }
@@ -82,7 +81,8 @@ export class LazyMap<K, V> implements Map<K, V> {
     /**
      * Removes the keys.
      *
-     * As a cleanup pass, this will also drop any complete timeouts.
+     * As a cleanup pass, this will also drop the current cache removal timeout
+     * if it's complete.
      *
      * @param keys
      */
@@ -90,9 +90,9 @@ export class LazyMap<K, V> implements Map<K, V> {
         for(const key of keys) {
             this.results.delete(key)
         }
-        this.timeouts = this.timeouts.filter(
-            gct => gct.ready
-        )
+        if(this.currentTimeout?.ready) {
+            this.currentTimeout = null
+        }
     }
 
     /**
