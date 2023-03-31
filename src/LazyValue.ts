@@ -28,7 +28,11 @@ export class LazyValue<T> {
         logger.log("Getting (trigger)")
         if(!this.state) {
             logger.log("Adding state")
-            this.state = StatefulPromise.immediate(this.loader).state
+            const sp = StatefulPromise.immediate(this.loader)
+            this.state = sp.state
+            if(this.cacheTTLMs !== undefined) {
+                sp.promise.then(() => this.state = undefined)
+            }
         }
         return this.state.value
     }
@@ -43,7 +47,9 @@ export class LazyValue<T> {
     /**
      *
      * @param loader This will be called when .value is fetched
+     * @param cacheTTLMs After this, it will wind back to non-loaded state
      */
-    constructor(public loader: () => Promise<T> | T) {
+    constructor(public loader: () => Promise<T> | T,
+        private cacheTTLMs?: number) {
     }
 }
