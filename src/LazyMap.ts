@@ -142,10 +142,7 @@ export class LazyMap<K, V> implements Map<K, V> {
         }
         const newResult = StatefulPromise.immediate(() => this.loader(key))
         this.results.set(key, newResult)
-        const activeTimeout = this.activeTimeout
-        if(activeTimeout) {
-            activeTimeout.add(key)
-        }
+        this.activeTimeout?.add(key)
         return newResult.value
     }
     has(key: K): boolean {
