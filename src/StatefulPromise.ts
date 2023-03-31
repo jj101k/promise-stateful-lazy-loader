@@ -17,11 +17,7 @@ export class StatefulPromise<T> {
         logger.log("Got result", valueOrPromise)
         if (valueOrPromise && typeof valueOrPromise == "object" && "then" in valueOrPromise) {
             logger.log("It's async")
-            try {
-                state.value = await valueOrPromise
-            } catch (e) {
-                console.error(e)
-            }
+            state.value = await valueOrPromise
         } else {
             logger.log("It's not async")
             state.value = valueOrPromise
@@ -37,7 +33,7 @@ export class StatefulPromise<T> {
      *
      * This doesn't perform any kind of cache lifetime management itself; if
      * you're using this for non-static data, you should really do something
-     * like setTimeout(() => value = null, 300_000) after value =
+     * like setTimeout(() => value = null, 300_000) after const {state} =
      * StatefulPromise.immediate(...).
      *
      * @param loader
@@ -45,8 +41,8 @@ export class StatefulPromise<T> {
      */
     public static immediate<T>(loader: () => Promise<T> | T) {
         const state = new StatefulPromise<T>()
-        this.callLoader(state, loader)
-        return state
+        const promise = this.callLoader(state, loader)
+        return {state, promise}
     }
 
     /**

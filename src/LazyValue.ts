@@ -28,7 +28,7 @@ export class LazyValue<T> {
         logger.log("Getting (trigger)")
         if(!this.state) {
             logger.log("Adding state")
-            this.state = StatefulPromise.immediate(this.loader)
+            this.state = StatefulPromise.immediate(this.loader).state
         }
         return this.state.value
     }
