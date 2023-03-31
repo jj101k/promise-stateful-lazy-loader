@@ -1,6 +1,5 @@
 {
     "name": "promise-stateful-lazy-loader",
-    "version": "1.0.0",
     "description": "Simple lazy loader to handle promises on state systems",
     "main": "dist/index.js",
     "scripts": {
