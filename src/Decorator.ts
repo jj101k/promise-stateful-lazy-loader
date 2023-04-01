@@ -1,21 +1,7 @@
 import { Constructs } from "./Constructs"
 import { AddLazyStates } from "./AddLazyStates"
 import { Logger } from "./Logger"
-
-/**
- * This is the set of lazy states for a prototype
- */
-interface LazyStateInfo<T> {
-    /**
-     * The prototype this applies to
-     */
-    prototype: T
-
-    /**
-     * The lazy state functions by property name
-     */
-    lazyStates: Map<string | number, () => Promise<any> | any>
-}
+import { LazyStateInfo } from "./LazyStateInfo"
 
 /**
  * Functionality for lazy state loading via decorators
@@ -37,7 +23,7 @@ export class Decorator {
      *
      * @param target
      */
-    static lazyStateConfigurationFor<T>(target: T): LazyStateInfo<T> {
+    private static lazyStateConfigurationFor<T>(target: T): LazyStateInfo<T> {
         const storedConfig = this.lazyStateConfigurations.find(
             config => config.prototype === target
         )
@@ -115,7 +101,7 @@ export class Decorator {
                 console.warn(`Class ${lazyClass.name} marked as lazy with no lazy properties`)
             }
 
-            return AddLazyStates(lazyClass)
+            return AddLazyStates(lazyClass, config)
         }
     }
 }

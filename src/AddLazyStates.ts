@@ -1,6 +1,6 @@
 import { Constructs } from "./Constructs"
-import { Decorator } from "./Decorator"
 import { DelayedLazyValue } from "./DelayedLazyValue"
+import { LazyStateInfo } from "./LazyStateInfo"
 import { WithLazyStates } from "./WithLazyStates"
 
 /**
@@ -8,9 +8,7 @@ import { WithLazyStates } from "./WithLazyStates"
  *
  * @param Base
  */
-export function AddLazyStates<T, TBase extends Constructs<T> >(Base: TBase): Constructs<T & WithLazyStates> {
-    const config = Decorator.lazyStateConfigurationFor(Base.prototype)
-
+export function AddLazyStates<T, TBase extends Constructs<T> >(Base: TBase, config: LazyStateInfo<T>): Constructs<T & WithLazyStates> {
     Base.prototype._lazy = Object.fromEntries(
         [...config.lazyStates.entries()].map(([propertyName, f]) => {
             return [propertyName, new DelayedLazyValue(f)]
