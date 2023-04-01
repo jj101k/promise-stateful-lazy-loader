@@ -4,6 +4,11 @@ import { Logger } from "./Logger"
 /**
  * This is an object with a "value" property to be lazy-loaded. The lazy-loading
  * functionality will be disabled initially.
+ *
+ * You can use this if it would be immediately evaluated, but you don't want the
+ * lazy action occurring at that time.
+ *
+ * @see DelayedLazyValue if you just want to delay for a fixed time.
  */
 export class InactiveLazyValue<T> extends LazyValue<T> {
     /**
