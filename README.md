@@ -110,10 +110,9 @@ class Foo {
     bar = new Map()
     getBar(b) {
         if(!this.bar.has(b)) {
-            this.bar.set(
-                b,
-                StatefulPromise.immediate(() => fetch(`/bar/${b}`))
-            )
+            const {state} = StatefulPromise.immediate(() => fetch(`/bar/${b}`))
+            this.bar.set(b, state)
+            setTimeout(() => this.bar.delete(b), 300_000)
         }
         return this.bar.get(b).value
     }
