@@ -37,10 +37,11 @@ export class StatefulPromise<T> {
      * StatefulPromise.immediate(...).
      *
      * @param loader
+     * @param id Set this to a unique value for cache control.
      * @returns
      */
-    public static immediate<T>(loader: () => Promise<T> | T) {
-        const state = new StatefulPromise<T>()
+    public static immediate<T>(loader: () => Promise<T> | T, id?: number) {
+        const state = new StatefulPromise<T>(undefined, id)
         const promise = this.callLoader(state, loader)
         return {state, promise}
     }
@@ -48,7 +49,8 @@ export class StatefulPromise<T> {
     /**
      *
      * @param value
+     * @param id Set this to a unique value for cache control.
      */
-    constructor(public value?: T) {
+    constructor(public value?: T, public readonly id?: number) {
     }
 }

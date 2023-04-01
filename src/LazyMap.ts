@@ -1,5 +1,19 @@
-import { BatchSendCondition, SelectionBuffer } from "@jdframe/selection-buffer"
+import { BatchSendCondition, SelectionBufferAny } from "@jdframe/selection-buffer"
 import { StatefulPromise } from "./StatefulPromise"
+
+/**
+ *
+ */
+interface VersionedCacheId<K extends string | number> {
+    /**
+     * The key from the cache
+     */
+    key: K
+    /**
+     * The unique ID of the content
+     */
+    id: number
+}
 
 /**
  * Allows you to take some action on a set of items after a fixed time, with
@@ -9,7 +23,7 @@ import { StatefulPromise } from "./StatefulPromise"
  * more efficiently if removing several at once, but it can safely be used for
  * other purposes.
  */
-class LargeCacheExpiryControl<T> extends SelectionBuffer<T> {
+class LargeCacheExpiryControl<K extends string | number, T extends {key: K} = VersionedCacheId<K>> extends SelectionBufferAny<K, T> {
     /**
      *
      */
@@ -34,7 +48,7 @@ class LargeCacheExpiryControl<T> extends SelectionBuffer<T> {
      * @param loadablePeriodMs
      */
     constructor(sendCondition: BatchSendCondition<T>, loadablePeriodMs?: number) {
-        super(sendCondition)
+        super((item: T) => item.key, sendCondition)
         if(loadablePeriodMs) {
             setTimeout(() => this.loadable = false, loadablePeriodMs)
         }
@@ -52,7 +66,15 @@ class LargeCacheExpiryControl<T> extends SelectionBuffer<T> {
  *
  * myProperty = new LazyMap<string, MyObject>((k) => fetch(`/objects/${k}`))
  */
-export class LazyMap<K, V> implements Map<K, V> {
+export class LazyMap<K extends string | number, V> implements Map<K, V> {
+    /**
+     *
+     */
+    private nextId = 0
+
+    /**
+     *
+     */
     private results = new Map<K, StatefulPromise<V>>()
 
     /**
@@ -84,11 +106,13 @@ export class LazyMap<K, V> implements Map<K, V> {
      * As a cleanup pass, this will also drop the current cache removal timeout
      * if it's complete.
      *
-     * @param keys
+     * @param entries
      */
-    private removeCacheEntries(keys: K[]) {
-        for(const key of keys) {
+    private removeCacheEntries(entries: VersionedCacheId<K>[]) {
+        for(const {key, id} of entries) {
+            if(id === this.results.get(key)?.id) {
             this.results.delete(key)
+            }
         }
         if(this.currentCacheExpiryHandler?.ready) {
             this.currentCacheExpiryHandler = null
@@ -138,10 +162,11 @@ export class LazyMap<K, V> implements Map<K, V> {
     get(key: K) {
         let result = this.results.get(key)
         if(!result) {
-            const sp = StatefulPromise.immediate(() => this.loader(key))
+            const id = this.nextId++
+            const sp = StatefulPromise.immediate(() => this.loader(key), id)
             result = sp.state
             this.results.set(key, result)
-            sp.promise.then(() => this.activeCacheExpiryHandler?.add(key))
+            sp.promise.then(() => this.activeCacheExpiryHandler?.add({key, id}))
         }
         return result.value
     }
@@ -152,7 +177,7 @@ export class LazyMap<K, V> implements Map<K, V> {
         return this.results.keys()
     }
     set(key: K, value: V): this {
-        this.results.set(key, new StatefulPromise(value))
+        this.results.set(key, new StatefulPromise(value, this.nextId++))
         return this
     }
     *values(): IterableIterator<V> {
