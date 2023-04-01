@@ -92,7 +92,7 @@ export class Decorator {
         /**
          * @param lazyClass
          */
-        return <C extends Constructs<any>>(lazyClass: C) => {
+        return <C extends Constructs<T>, T>(lazyClass: C) => {
             const config = this.lazyStateConfigurationFor(lazyClass.prototype)
 
             this.logger.log(`Wrapping the class ${lazyClass.name}`)
