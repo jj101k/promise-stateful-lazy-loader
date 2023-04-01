@@ -24,19 +24,17 @@ export class Decorator {
      * @param target
      */
     private static lazyStateConfigurationFor<T>(target: T): LazyStateInfo<T> {
-        const storedConfig = this.lazyStateConfigurations.find(
+        let config = this.lazyStateConfigurations.find(
             config => config.prototype === target
-        )
-        if (storedConfig) {
-            return storedConfig
-        } else {
-            const config = {
+        ) as LazyStateInfo<T> | undefined
+        if (!config) {
+            config = {
                 prototype: target,
                 lazyStates: new Map(),
             }
             this.lazyStateConfigurations.push(config)
-            return config
         }
+        return config
     }
 
     /**
