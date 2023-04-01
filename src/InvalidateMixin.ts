@@ -1,10 +1,11 @@
 import { LazyValue } from "./LazyValue"
 import { Logger } from "./Logger"
+import { WithInvalidate } from "./WithInvalidate"
 
 /**
  * Adds support for invalidating rather than rejecting
  */
-export function InvalidateMixin<T, TBase extends { new(...args: any[]): LazyValue<T>} >(Base: TBase) {
+export function InvalidateMixin<T, TBase extends { new(...args: any[]): LazyValue<T>} >(Base: TBase): {new(...args: any[]): LazyValue<T> & WithInvalidate} {
     /**
      * This is a little more heavy than the counterpart basic class, and will
      * retain the old value while invalid.
@@ -13,7 +14,7 @@ export function InvalidateMixin<T, TBase extends { new(...args: any[]): LazyValu
         /**
          * This is true when the object has been invalidated
          */
-        invalid = false
+        private invalid = false
 
         /**
          * This loads the value (again).
@@ -37,10 +38,6 @@ export function InvalidateMixin<T, TBase extends { new(...args: any[]): LazyValu
             super.value = v
         }
 
-        /**
-         * This will mark the state as invalid, so that the loader will work again, but
-         * it will keep the value in the meantime.
-         */
         invalidate() {
             this.invalid = true
         }
