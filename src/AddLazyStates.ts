@@ -15,5 +15,5 @@ export function AddLazyStates<T, TBase extends Constructs<T> >(Base: TBase, conf
         })
     )
 
-    return Base as Constructs<T & WithLazyStates>
+    return Base as unknown as Constructs<T & WithLazyStates>
 }
