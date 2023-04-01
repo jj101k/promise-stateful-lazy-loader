@@ -1,5 +1,6 @@
 /**
- *
+ * This is a little more heavy than the counterpart basic class, and will
+ * retain the old value while invalid.
  */
 export interface WithInvalidate {
     /**

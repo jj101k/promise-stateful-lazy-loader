@@ -3,22 +3,20 @@ import { Logger } from "./Logger"
 import { WithInvalidate } from "./WithInvalidate"
 
 /**
+ *
+ */
+type Constructs<T> = { new(...args: any[]): T}
+
+/**
  * Adds support for invalidating rather than rejecting
  */
-export function InvalidateMixin<T, TBase extends { new(...args: any[]): LazyValue<T>} >(Base: TBase): {new(...args: any[]): LazyValue<T> & WithInvalidate} {
-    /**
-     * This is a little more heavy than the counterpart basic class, and will
-     * retain the old value while invalid.
-     */
-    return class extends Base {
+export function InvalidateMixin<T, TBase extends Constructs<LazyValue<T>> >(Base: TBase): Constructs<LazyValue<T> & WithInvalidate> {
+    return class extends Base implements WithInvalidate {
         /**
          * This is true when the object has been invalidated
          */
         private invalid = false
 
-        /**
-         * This loads the value (again).
-         */
         async loadValue() {
             this.value = await this.loader()
         }
