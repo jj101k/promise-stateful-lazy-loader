@@ -9,7 +9,7 @@ export class LazyValue<T> {
      * This is used for cache management to avoid clearing a just-loaded
      * value.
      */
-    private version = 0
+    private lastId = 0
 
     /**
      * This is where the state for the promise goes. This is protected in the
@@ -34,13 +34,11 @@ export class LazyValue<T> {
         logger.log("Getting (trigger)")
         if(!this.state) {
             logger.log("Adding state")
-            const sp = StatefulPromise.immediate(this.loader)
-            this.state = sp.state
-            this.version++
+            const {state, promise} = StatefulPromise.immediate(this.loader, ++this.lastId)
+            this.state = state
             if(this.cacheTTLMs !== undefined) {
-                const version = this.version
-                sp.promise.then(() => {
-                    if(version == this.version) {
+                promise.then(() => {
+                    if(this.state?.id === state.id) {
                         this.state = undefined
                     }
                 })
@@ -49,11 +47,10 @@ export class LazyValue<T> {
         return this.state.value
     }
     set value(v: T | undefined) {
-        this.version++
         if(v === undefined) {
             this.state = undefined
         } else {
-            this.state = new StatefulPromise(v)
+            this.state = new StatefulPromise(v, ++this.lastId)
         }
     }
 
