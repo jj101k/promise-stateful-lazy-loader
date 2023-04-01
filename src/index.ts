@@ -3,7 +3,6 @@ import { InactiveLazyValue } from "./InactiveLazyValue"
 import { InvalidateMixin } from "./InvalidateMixin"
 import { LazyValue } from "./LazyValue"
 
-export * from "./Decorator"
 export const Delayed = {
     LazyValue: DelayedLazyValue,
 }
@@ -25,3 +24,4 @@ export const Invalidate = {
     },
 }
 export * from "./LazyMap"
+export * from "./PSLazy"

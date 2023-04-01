@@ -6,7 +6,7 @@ import { LazyStateInfo } from "./LazyStateInfo"
 /**
  * Functionality for lazy state loading via decorators
  */
-export class Decorator {
+export class PSLazy {
     /**
      *
      */
@@ -43,7 +43,7 @@ export class Decorator {
      * Usage (typescript):
      *
      * ```ts
-     *  @Decorator.lazyState(() => fetch("/bar"))
+     *  @PSLazy.lazyState(() => fetch("/bar"))
      *  bar!: string
      * ```
      *
@@ -82,7 +82,7 @@ export class Decorator {
      * Usage:
      *
      * ```js
-     * @Decorator.lazyStates()
+     * @PSLazy.lazyStates()
      * class Foo {
      * ```
      */

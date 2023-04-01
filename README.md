@@ -26,11 +26,11 @@ class Foo {
 ...or, if _experimental decorators_ are your thing, this:
 
 ```js
-import {Decorator} from "promise-stateful-lazy-loader"
+import {PSLazy} from "promise-stateful-lazy-loader"
 
-@Decorator.lazyStates()
+@PSLazy.lazyStates()
 class DecoratedClass {
-    @Decorator.lazyState(() => fetch("/bar"))
+    @PSLazy.lazyState(() => fetch("/bar"))
     bar!: string
 }
 ```
@@ -44,11 +44,11 @@ loaded when it's actually used properly.
 ### Decorator
 
 ```ts
-import {Decorator} from "promise-stateful-lazy-loader"
+import {PSLazy} from "promise-stateful-lazy-loader"
 
-@Decorator.lazyStates()
+@PSLazy.lazyStates()
 class DecoratedClass {
-    @Decorator.lazyState(() => fetch("/bar"))
+    @PSLazy.lazyState(() => fetch("/bar"))
     bar!: string
 }
 ```

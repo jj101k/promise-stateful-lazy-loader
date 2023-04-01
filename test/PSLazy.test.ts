@@ -1,19 +1,19 @@
 import assert from "assert"
 import { describe, it } from "mocha"
-import { Decorator } from "../"
+import { PSLazy } from ".."
 
-@Decorator.lazyStates()
+@PSLazy.lazyStates()
 class DecoratedClass {
-    @Decorator.lazyState(() => "FIXME")
+    @PSLazy.lazyState(() => "FIXME")
     foo!: string
 
-    @Decorator.lazyState(async () => {
+    @PSLazy.lazyState(async () => {
         await new Promise(resolve => setTimeout(resolve, 50))
         return 1
     })
     bar!: number
 
-    @Decorator.lazyState(async () => {
+    @PSLazy.lazyState(async () => {
         await new Promise(resolve => setTimeout(resolve, 50))
         throw new Error("Failed")
     })
