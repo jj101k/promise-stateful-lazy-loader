@@ -109,14 +109,13 @@ export class Decorator {
         return <C extends Constructs<any>>(lazyClass: C) => {
             const config = this.lazyStateConfigurationFor(lazyClass.prototype)
 
-            if (config.lazyStates.size > 0) {
-                this.logger.log(`Wrapping the class ${lazyClass.name}`)
+            this.logger.log(`Wrapping the class ${lazyClass.name}`)
 
-                return AddLazyStates(lazyClass)
-            } else {
+            if (config.lazyStates.size == 0) {
                 console.warn(`Class ${lazyClass.name} marked as lazy with no lazy properties`)
-                return lazyClass
             }
+
+            return AddLazyStates(lazyClass)
         }
     }
 }
