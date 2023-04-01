@@ -55,6 +55,15 @@ export class Decorator {
     /**
      * This marks a property as a lazy state (see LazyStates)
      *
+     * Usage (typescript):
+     *
+     * ```ts
+     *  @Decorator.lazyState(() => fetch("/bar"))
+     *  bar!: string
+     * ```
+     *
+     * @see lazyStates(), which must be used on the class also.
+     *
      * @param loader The function which will load the value
      */
     static lazyState<T, P>(loader: () => Promise<P> | P) {
@@ -84,6 +93,13 @@ export class Decorator {
     /**
      * This defines that the class has lazy states, and connects them in the
      * constructor.
+     *
+     * Usage:
+     *
+     * ```js
+     * @Decorator.lazyStates()
+     * class Foo {
+     * ```
      */
     static lazyStates<T extends { new(...args: any[]): any}>() {
         /**

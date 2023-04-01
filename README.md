@@ -43,7 +43,7 @@ loaded when it's actually used properly.
 
 ### Decorator
 
-```js
+```ts
 import {Decorator} from "promise-stateful-lazy-loader"
 
 @Decorator.lazyStates()
@@ -52,6 +52,8 @@ class DecoratedClass {
     bar!: string
 }
 ```
+
+Note: Javascript usage is the same without the `!: string` part.
 
 This saves you having to write your own wrapper, but otherwise is the same as
 "Delayed" below.
