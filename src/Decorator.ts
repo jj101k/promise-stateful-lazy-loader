@@ -1,5 +1,6 @@
+import { Constructs } from "./Constructs"
+import { AddLazyStates } from "./AddLazyStates"
 import { Logger } from "./Logger"
-import { DelayedLazyValue } from "./DelayedLazyValue"
 
 /**
  * This is the set of lazy states for a prototype
@@ -36,7 +37,7 @@ export class Decorator {
      *
      * @param target
      */
-    private static lazyStateConfigurationFor<T>(target: T): LazyStateInfo<T> {
+    static lazyStateConfigurationFor<T>(target: T): LazyStateInfo<T> {
         const storedConfig = this.lazyStateConfigurations.find(
             config => config.prototype === target
         )
@@ -101,29 +102,17 @@ export class Decorator {
      * class Foo {
      * ```
      */
-    static lazyStates<T extends { new(...args: any[]): any}>() {
+    static lazyStates() {
         /**
          * @param lazyClass
          */
-        return (lazyClass: T) => {
+        return <C extends Constructs<any>>(lazyClass: C) => {
             const config = this.lazyStateConfigurationFor(lazyClass.prototype)
 
             if (config.lazyStates.size > 0) {
                 this.logger.log(`Wrapping the class ${lazyClass.name}`)
 
-                return class extends lazyClass {
-                    /**
-                     *
-                     */
-                    protected _lazy: { [propertyName: string]: DelayedLazyValue<T>}  = {};
-
-                    constructor(...args: any[]) {
-                        super(...args)
-                        for (const [propertyName, f] of config.lazyStates.entries()) {
-                            this._lazy[propertyName] = new DelayedLazyValue(f)
-                        }
-                    }
-                }
+                return AddLazyStates(lazyClass)
             } else {
                 console.warn(`Class ${lazyClass.name} marked as lazy with no lazy properties`)
                 return lazyClass

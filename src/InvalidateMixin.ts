@@ -1,11 +1,7 @@
+import { Constructs } from "./Constructs"
 import { LazyValue } from "./LazyValue"
 import { Logger } from "./Logger"
 import { WithInvalidate } from "./WithInvalidate"
-
-/**
- *
- */
-type Constructs<T> = { new(...args: any[]): T}
 
 /**
  * Adds support for invalidating rather than rejecting
