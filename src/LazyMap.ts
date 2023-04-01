@@ -111,7 +111,7 @@ export class LazyMap<K extends string | number, V> implements Map<K, V> {
     private removeCacheEntries(entries: VersionedCacheId<K>[]) {
         for(const {key, id} of entries) {
             if(id === this.results.get(key)?.id) {
-            this.results.delete(key)
+                this.results.delete(key)
             }
         }
         if(this.currentCacheExpiryHandler?.ready) {
@@ -176,10 +176,20 @@ export class LazyMap<K extends string | number, V> implements Map<K, V> {
     *keys(): IterableIterator<K> {
         return this.results.keys()
     }
+
+    /**
+     * Please note that entries set this way are not subject to automatic
+     * removal - you must remove them yourself if they expire.
+     *
+     * @param key
+     * @param value
+     * @returns
+     */
     set(key: K, value: V): this {
         this.results.set(key, new StatefulPromise(value, this.nextId++))
         return this
     }
+
     *values(): IterableIterator<V> {
         for(const value of this.results.values()) {
             if(value.value !== undefined) {
