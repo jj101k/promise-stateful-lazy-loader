@@ -42,12 +42,12 @@ describe("Decorators", () => {
         })
         it("Can track a simple case (failure)", async () => {
             await new Timeout(0)
-            assert.equal(o.bar, undefined)
+            assert.equal(o.bar, undefined, "Success case is initially unset")
             await new Timeout(0)
             const b = o.baz
-            assert.equal(b, undefined)
+            assert.equal(b, undefined, "Error case is initially unset")
             await new Timeout(50)
-            assert.equal(o.baz, undefined)
+            assert.equal(o.baz, undefined, "Error case remains unset")
         })
     })
 })
