@@ -1,5 +1,6 @@
 import { BatchSendCondition, SelectionBufferAny } from "@jdframe/selection-buffer"
 import { StatefulPromise } from "./StatefulPromise"
+import { Timeout } from "@jdframe/core"
 
 /**
  *
@@ -50,7 +51,7 @@ class LargeCacheExpiryControl<K extends string | number, T extends {key: K} = Ve
     constructor(sendCondition: BatchSendCondition<T>, loadablePeriodMs?: number) {
         super((item: T) => item.key, sendCondition)
         if(loadablePeriodMs) {
-            setTimeout(() => this.loadable = false, loadablePeriodMs)
+            new Timeout(loadablePeriodMs).then(() => this.loadable = false)
         }
     }
 }

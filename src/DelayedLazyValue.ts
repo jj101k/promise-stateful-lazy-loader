@@ -1,5 +1,6 @@
 import { InactiveLazyValue } from "./InactiveLazyValue"
 import { Logger } from "./Logger"
+import { Timeout } from "@jdframe/core"
 
 /**
  * This is an object with a "value" property to be lazy-loaded. The lazy-loading
@@ -22,12 +23,12 @@ export class DelayedLazyValue<T> extends InactiveLazyValue<T> {
             this.deferUntil = undefined
             if(deferUntil === null) {
                 logger.log("0ms activate")
-                setTimeout(() => this.activate(), 0)
+                new Timeout(0).then(() => this.activate())
             } else {
                 const now = new Date()
                 if(now < deferUntil) {
                     logger.log("later activate")
-                    setTimeout(() => this.activate(), deferUntil.valueOf() - now.valueOf())
+                    new Timeout(deferUntil.valueOf() - now.valueOf()).then(() => this.activate())
                 } else {
                     logger.log("immediate activate")
                     this.activate()

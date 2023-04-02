@@ -1,6 +1,7 @@
 import assert from "assert"
 import { describe, it } from "mocha"
 import { DelayedLazyValue } from "../src/DelayedLazyValue"
+import { Timeout } from "@jdframe/core"
 
 describe("State tracking", () => {
     describe("observe", () => {
@@ -69,7 +70,7 @@ describe("State tracking", () => {
             }
             observe(o)
             assert.equal(o.foo, undefined, "Initially no value")
-            await new Promise(resolve => setTimeout(resolve, 0))
+            await new Timeout(0)
             // We actually just look for any change.
             assert.equal(o.foo, "FIXME", "Value is eventually set")
         })
@@ -123,7 +124,7 @@ describe("State tracking", () => {
             const ob = new Proxy(o, handler)
 
             assert.equal(ob.foo, undefined, "Initially no value")
-            await new Promise(resolve => setTimeout(resolve, 0))
+            await new Timeout(0)
             // We actually just look for any change.
             assert.equal(ob.foo, "FIXME", "Value is eventually set")
         })

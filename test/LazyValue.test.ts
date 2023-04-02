@@ -1,6 +1,7 @@
 import assert from "assert"
 import { describe, it } from "mocha"
 import { LazyValue } from "../src/LazyValue"
+import { Timeout } from "@jdframe/core"
 
 describe("Lazy", () => {
     describe("Delay tests", () => {
@@ -12,11 +13,11 @@ describe("Lazy", () => {
             let i = 0
             const f = new LazyValue(async () => i++)
             assert.equal(f.value, undefined)
-            await new Promise(resolve => setTimeout(resolve, 0))
+            await new Timeout(0)
             assert.equal(f.value, 0)
             f.value = undefined
             assert.equal(f.value, undefined)
-            await new Promise(resolve => setTimeout(resolve, 0))
+            await new Timeout(0)
             assert.equal(f.value, 1)
         })
     })
