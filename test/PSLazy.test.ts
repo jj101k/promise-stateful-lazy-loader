@@ -2,7 +2,7 @@ import assert from "assert"
 import { describe, it } from "mocha"
 import { PSLazy } from ".."
 
-@PSLazy.lazyStates()
+@PSLazy.lazyStates
 class DecoratedClass {
     @PSLazy.lazyState(() => "FIXME")
     foo!: string

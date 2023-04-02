@@ -82,24 +82,21 @@ export class PSLazy {
      * Usage:
      *
      * ```js
-     * @PSLazy.lazyStates()
+     * @PSLazy.lazyStates
      * class Foo {
      * ```
+     *
+     * @param lazyClass
      */
-    static lazyStates() {
-        /**
-         * @param lazyClass
-         */
-        return <C extends Constructs<T>, T>(lazyClass: C) => {
-            const config = this.lazyStateConfigurationFor(lazyClass.prototype)
+    static lazyStates<C extends Constructs<T>, T>(lazyClass: C) {
+        const config = PSLazy.lazyStateConfigurationFor(lazyClass.prototype)
 
-            this.logger.log(`Wrapping the class ${lazyClass.name}`)
+        PSLazy.logger.log(`Wrapping the class ${lazyClass.name}`)
 
-            if (config.lazyStates.size == 0) {
-                console.warn(`Class ${lazyClass.name} marked as lazy with no lazy properties`)
-            }
-
-            return AddLazyStates(lazyClass, config)
+        if (config.lazyStates.size == 0) {
+            console.warn(`Class ${lazyClass.name} marked as lazy with no lazy properties`)
         }
+
+        return AddLazyStates(lazyClass, config)
     }
 }

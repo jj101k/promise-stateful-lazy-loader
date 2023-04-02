@@ -28,7 +28,7 @@ class Foo {
 ```js
 import {PSLazy} from "promise-stateful-lazy-loader"
 
-@PSLazy.lazyStates()
+@PSLazy.lazyStates
 class DecoratedClass {
     @PSLazy.lazyState(() => fetch("/bar"))
     bar!: string
@@ -46,7 +46,7 @@ loaded when it's actually used properly.
 ```ts
 import {PSLazy} from "promise-stateful-lazy-loader"
 
-@PSLazy.lazyStates()
+@PSLazy.lazyStates
 class DecoratedClass {
     @PSLazy.lazyState(() => fetch("/bar"))
     bar!: string
