@@ -1,6 +1,6 @@
 import { DelayedLazyValue } from "./DelayedLazyValue"
 import { InactiveLazyValue } from "./InactiveLazyValue"
-import { InvalidateMixin } from "./InvalidateMixin"
+import { InvalidateMixin } from "./Mixins/InvalidateMixin"
 import { LazyValue } from "./LazyValue"
 
 export const Delayed = {

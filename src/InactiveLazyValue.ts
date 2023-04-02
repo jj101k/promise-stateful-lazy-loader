@@ -1,5 +1,5 @@
 import { LazyValue } from "./LazyValue"
-import { Logger } from "./Logger"
+import { Logger } from "./Utilities/Logger"
 
 /**
  * This is an object with a "value" property to be lazy-loaded. The lazy-loading

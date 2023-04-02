@@ -1,7 +1,8 @@
-import { Constructs } from "./Constructs"
-import { AddLazyStates } from "./AddLazyStates"
-import { Logger } from "./Logger"
-import { LazyStateInfo } from "./LazyStateInfo"
+import { Constructs } from "./Types/Constructs"
+import { DelayedLazyValue } from "./DelayedLazyValue"
+import { LazyStateInfo } from "./Types/LazyStateInfo"
+import { Logger } from "./Utilities/Logger"
+import { WithLazyStates } from "./Types/WithLazyStates"
 
 /**
  * Functionality for lazy state loading via decorators
@@ -97,6 +98,12 @@ export class PSLazy {
             console.warn(`Class ${lazyClass.name} marked as lazy with no lazy properties`)
         }
 
-        return AddLazyStates(lazyClass, config)
+        return class extends (lazyClass as any) {
+            _lazy = Object.fromEntries(
+                [...config.lazyStates.entries()].map(([propertyName, f]) => {
+                    return [propertyName, new DelayedLazyValue(f)]
+                })
+            )
+        } as unknown as Constructs<T & WithLazyStates> & C
     }
 }

@@ -1,5 +1,5 @@
 import { InactiveLazyValue } from "./InactiveLazyValue"
-import { Logger } from "./Logger"
+import { Logger } from "./Utilities/Logger"
 import { Timeout } from "@jdframe/core"
 
 /**

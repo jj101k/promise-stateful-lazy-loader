@@ -1,7 +1,7 @@
-import { Constructs } from "./Constructs"
-import { LazyValue } from "./LazyValue"
-import { Logger } from "./Logger"
-import { WithInvalidate } from "./WithInvalidate"
+import { Constructs } from "../Types/Constructs"
+import { LazyValue } from "../LazyValue"
+import { Logger } from "../Utilities/Logger"
+import { WithInvalidate } from "../Types/WithInvalidate"
 
 /**
  * Adds support for invalidating rather than rejecting

@@ -1,5 +1,5 @@
-import { Logger } from "./Logger"
-import { StatefulPromise } from "./StatefulPromise"
+import { Logger } from "./Utilities/Logger"
+import { StatefulPromise } from "./Utilities/StatefulPromise"
 
 /**
  * This is an object with a "value" property to be lazy-loaded.

@@ -1,5 +1,5 @@
 import { BatchSendCondition, SelectionBufferAny } from "@jdframe/selection-buffer"
-import { StatefulPromise } from "./StatefulPromise"
+import { StatefulPromise } from "./Utilities/StatefulPromise"
 import { Timeout } from "@jdframe/core"
 
 /**

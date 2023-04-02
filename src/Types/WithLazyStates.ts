@@ -1,4 +1,4 @@
-import { DelayedLazyValue } from "./DelayedLazyValue"
+import { DelayedLazyValue } from "../DelayedLazyValue"
 
 /**
  *
