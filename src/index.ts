@@ -7,7 +7,7 @@ export const Delayed = {
     LazyValue: DelayedLazyValue,
 }
 export const Immediate = {
-    LazyValue: LazyValue,
+    LazyValue,
 }
 export const Inactive = {
     LazyValue: InactiveLazyValue,

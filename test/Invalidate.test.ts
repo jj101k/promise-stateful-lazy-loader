@@ -1,6 +1,6 @@
 import assert from "assert"
 import { describe, it } from "mocha"
-import { Invalidate } from ".."
+import { Invalidate } from "../src"
 import { Timeout } from "@jdframe/core"
 
 describe("Delayed (Invalidate)", () => {

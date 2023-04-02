@@ -1,6 +1,6 @@
 import assert from "assert"
 import { describe, it } from "mocha"
-import { PSLazy } from ".."
+import { PSLazy } from "../src"
 import { Timeout } from "@jdframe/core"
 
 @PSLazy.lazyStates

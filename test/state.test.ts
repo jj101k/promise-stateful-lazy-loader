@@ -1,7 +1,7 @@
 import assert from "assert"
 import { describe, it } from "mocha"
-import { DelayedLazyValue } from "../src/DelayedLazyValue"
 import { Timeout } from "@jdframe/core"
+import { Delayed } from "../src"
 
 describe("State tracking", () => {
     describe("observe", () => {
@@ -63,7 +63,7 @@ describe("State tracking", () => {
         }
         it("Can track a simple case", async () => {
             const o = {
-                fooDelayed: new DelayedLazyValue(() => "FIXME"),
+                fooDelayed: new Delayed.LazyValue(() => "FIXME"),
                 get foo() {
                     return this.fooDelayed.value
                 },
@@ -115,7 +115,7 @@ describe("State tracking", () => {
         }
         it("Can track a simple case", async () => {
             const o = {
-                fooDelayed: new DelayedLazyValue(() => "FIXME"),
+                fooDelayed: new Delayed.LazyValue(() => "FIXME"),
                 get foo() {
                     return this.fooDelayed.value
                 },

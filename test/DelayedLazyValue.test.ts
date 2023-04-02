@@ -1,15 +1,15 @@
 import assert from "assert"
 import { describe, it } from "mocha"
-import { DelayedLazyValue } from "../src/DelayedLazyValue"
 import { Timeout } from "@jdframe/core"
+import { Delayed } from "../src"
 
 class SimpleClass {
-    fooDelayed = new DelayedLazyValue(() => "FIXME")
-    barDelayed = new DelayedLazyValue(async () => {
+    fooDelayed = new Delayed.LazyValue(() => "FIXME")
+    barDelayed = new Delayed.LazyValue(async () => {
         await new Timeout(50)
         return 1
     })
-    bazDelayed = new DelayedLazyValue(async () => {
+    bazDelayed = new Delayed.LazyValue(async () => {
         await new Timeout(50)
         throw new Error("Failed")
     })
@@ -59,13 +59,13 @@ describe("Delayed", () => {
     })
     describe("Delay tests", () => {
         it("Is normally evaluated on the next loop", async () => {
-            const f = new DelayedLazyValue(() => "test")
+            const f = new Delayed.LazyValue(() => "test")
             assert.equal(f.value, undefined)
             await new Timeout(0)
             assert.equal(f.value, "test")
         })
         it("Can be evaluated at a later time", async () => {
-            const f = new DelayedLazyValue(() => "test", 50)
+            const f = new Delayed.LazyValue(() => "test", 50)
             assert.equal(f.value, undefined)
             await new Timeout(0)
             assert.equal(f.value, undefined)
