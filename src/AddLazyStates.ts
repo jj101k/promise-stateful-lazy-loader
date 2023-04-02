@@ -8,12 +8,12 @@ import { WithLazyStates } from "./WithLazyStates"
  *
  * @param Base
  */
-export function AddLazyStates<T, TBase extends Constructs<T> >(Base: TBase, config: LazyStateInfo<T>): Constructs<T & WithLazyStates> {
-    Base.prototype._lazy = Object.fromEntries(
-        [...config.lazyStates.entries()].map(([propertyName, f]) => {
-            return [propertyName, new DelayedLazyValue(f)]
-        })
-    )
-
-    return Base as unknown as Constructs<T & WithLazyStates>
+export function AddLazyStates<T, TBase extends Constructs<T>>(Base: TBase, config: LazyStateInfo<T>): Constructs<T & WithLazyStates> {
+    return class extends (Base as any) {
+        _lazy = Object.fromEntries(
+            [...config.lazyStates.entries()].map(([propertyName, f]) => {
+                return [propertyName, new DelayedLazyValue(f)]
+            })
+        )
+    } as unknown as Constructs<T & WithLazyStates>
 }
